@@ -1,5 +1,8 @@
 package com.gerenciapessoas.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,5 +40,14 @@ public class PessoaService {
 				.message("Pessoa Criada Com Sucesso, ID:" + pessoaSalva.getId())
 				.build();
 	}
+
+	public List<PessoaDTO> listarTodos() {
+		List<Pessoa> todasAsPessoas = pessoaRepository.findAll();
+		return todasAsPessoas.stream()
+				.map(pessoaMapper::toDTO)
+				.collect(Collectors
+						.toList());
+	}
+
 
 }
