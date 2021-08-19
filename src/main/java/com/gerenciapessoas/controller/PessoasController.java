@@ -1,5 +1,7 @@
 package com.gerenciapessoas.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,9 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gerenciapessoas.dto.MessageResponseDTO;
-import com.gerenciapessoas.entity.Pessoa;
-import com.gerenciapessoas.repository.PessoaRepository;
+import com.gerenciapessoas.dto.request.PessoaDTO;
+import com.gerenciapessoas.dto.response.MessageResponseDTO;
 import com.gerenciapessoas.services.PessoaService;
 
 @RestController
@@ -27,8 +28,8 @@ public class PessoasController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public MessageResponseDTO criarPessoa(@RequestBody Pessoa pessoa) {
-		return pessoaService.criarPessoa(pessoa);
+	public MessageResponseDTO criarPessoa(@RequestBody @Valid PessoaDTO pessoaDTO) {
+		return pessoaService.criarPessoa(pessoaDTO);
 	}
 
 }

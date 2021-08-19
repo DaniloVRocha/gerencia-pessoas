@@ -1,4 +1,4 @@
-package com.gerenciapessoas.dto;
+package com.gerenciapessoas.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
