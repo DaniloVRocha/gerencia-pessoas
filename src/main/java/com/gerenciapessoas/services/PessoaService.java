@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.gerenciapessoas.dto.request.PessoaDTO;
 import com.gerenciapessoas.dto.response.MessageResponseDTO;
 import com.gerenciapessoas.entity.Pessoa;
+import com.gerenciapessoas.exception.PessoaNaoEncontradaException;
 import com.gerenciapessoas.mapper.PessoaMapper;
 import com.gerenciapessoas.repository.PessoaRepository;
 
@@ -18,8 +19,7 @@ public class PessoaService {
 
 	private PessoaRepository pessoaRepository;
 	private final PessoaMapper pessoaMapper = PessoaMapper.INSTANCE;
-	
-	
+
 	public PessoaService() {
 		super();
 	}
@@ -32,22 +32,28 @@ public class PessoaService {
 
 	public MessageResponseDTO criarPessoa(@RequestBody PessoaDTO pessoaDTO) {
 		Pessoa pessoaSalvar = pessoaMapper.toModel(pessoaDTO);
-		
-		
+
 		Pessoa pessoaSalva = pessoaRepository.save(pessoaSalvar);
-		return MessageResponseDTO
-				.builder()
-				.message("Pessoa Criada Com Sucesso, ID:" + pessoaSalva.getId())
-				.build();
+		return MessageResponseDTO.builder().message("Pessoa Criada Com Sucesso, ID:" + pessoaSalva.getId()).build();
 	}
 
 	public List<PessoaDTO> listarTodos() {
 		List<Pessoa> todasAsPessoas = pessoaRepository.findAll();
-		return todasAsPessoas.stream()
-				.map(pessoaMapper::toDTO)
-				.collect(Collectors
-						.toList());
+		return todasAsPessoas.stream().map(pessoaMapper::toDTO).collect(Collectors.toList());
 	}
 
+	public PessoaDTO buscarId(Long id) throws PessoaNaoEncontradaException {
+		Pessoa pessoa = verificarExistencia(id);
+		return pessoaMapper.toDTO(pessoa);
+	}
+
+	private Pessoa verificarExistencia(Long id) throws PessoaNaoEncontradaException {
+		return pessoaRepository.findById(id).orElseThrow(() -> new PessoaNaoEncontradaException(id));
+	}
+
+	public void excluir(Long id) throws PessoaNaoEncontradaException {
+		verificarExistencia(id);
+		pessoaRepository.deleteById(id);
+	}
 
 }
