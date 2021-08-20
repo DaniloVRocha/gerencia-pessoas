@@ -34,7 +34,7 @@ public class PessoaService {
 		Pessoa pessoaSalvar = pessoaMapper.toModel(pessoaDTO);
 
 		Pessoa pessoaSalva = pessoaRepository.save(pessoaSalvar);
-		return MessageResponseDTO.builder().message("Pessoa Criada Com Sucesso, ID:" + pessoaSalva.getId()).build();
+		return createMethodResponse(pessoaSalva, "Pessoa Criada com Sucesso");
 	}
 
 	public List<PessoaDTO> listarTodos() {
@@ -47,13 +47,26 @@ public class PessoaService {
 		return pessoaMapper.toDTO(pessoa);
 	}
 
-	private Pessoa verificarExistencia(Long id) throws PessoaNaoEncontradaException {
-		return pessoaRepository.findById(id).orElseThrow(() -> new PessoaNaoEncontradaException(id));
-	}
-
 	public void excluir(Long id) throws PessoaNaoEncontradaException {
 		verificarExistencia(id);
 		pessoaRepository.deleteById(id);
+	}
+
+	public MessageResponseDTO updatePessoaId(Long id, PessoaDTO pessoaDTO) throws PessoaNaoEncontradaException {
+		verificarExistencia(id);
+
+		Pessoa pessoaEditar = pessoaMapper.toModel(pessoaDTO);
+		Pessoa pessoaEditada = pessoaRepository.save(pessoaEditar);
+
+		return createMethodResponse(pessoaEditada, "Pessoa Editada com Sucesso");
+	}
+
+	private MessageResponseDTO createMethodResponse(Pessoa pessoa, String s) {
+		return MessageResponseDTO.builder().message(s + pessoa.getId()).build();
+	}
+
+	private Pessoa verificarExistencia(Long id) throws PessoaNaoEncontradaException {
+		return pessoaRepository.findById(id).orElseThrow(() -> new PessoaNaoEncontradaException(id));
 	}
 
 }
