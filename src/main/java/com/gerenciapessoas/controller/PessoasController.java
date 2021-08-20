@@ -21,17 +21,14 @@ import com.gerenciapessoas.dto.response.MessageResponseDTO;
 import com.gerenciapessoas.exception.PessoaNaoEncontradaException;
 import com.gerenciapessoas.services.PessoaService;
 
+import lombok.AllArgsConstructor;
+
 @RestController
 @RequestMapping("/api/v1/pessoas")
+@AllArgsConstructor( onConstructor = @__(@Autowired))
 public class PessoasController {
 	
 	private PessoaService pessoaService;
-	
-	@Autowired
-	public PessoasController(PessoaService pessoaService) {
-		super();
-		this.pessoaService = pessoaService;
-	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -41,8 +38,7 @@ public class PessoasController {
 	
 	@GetMapping
 	public List<PessoaDTO> listarTodos(){
-		return pessoaService.listarTodos();
-		
+		return pessoaService.listarTodos();	
 	}
 	
 	@GetMapping("/{id}")
@@ -52,8 +48,7 @@ public class PessoasController {
 	
 	@PutMapping("/{id}")
 	public MessageResponseDTO updatePessoa(@PathVariable Long id, @RequestBody @Valid PessoaDTO pessoaDTO) throws PessoaNaoEncontradaException {
-		return pessoaService.updatePessoaId(id, pessoaDTO);
-		
+		return pessoaService.updatePessoaId(id, pessoaDTO);	
 	}
 	
 	@DeleteMapping("/{id}")
