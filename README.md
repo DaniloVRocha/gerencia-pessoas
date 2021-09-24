@@ -17,3 +17,4 @@ São necessários os seguintes pré-requisitos para a execução do projeto:
 * Java 11 ou versões superiores.
 * Maven 3.6.3 ou versões superiores.
 * Spring Tools Suite 4.
+* Lombok
